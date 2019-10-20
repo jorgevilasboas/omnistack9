@@ -1,27 +1,27 @@
 import React, { useState } from 'react';
-import { View,AsyncStorage, KeyboardAvoidingView, TouchableOpacity, Platform, Text, Image, TextInput, StyleSheet } from 'react-native';
-
+import { View, AsyncStorage, KeyboardAvoidingView, TouchableOpacity, Platform, Text, Image, TextInput, StyleSheet } from 'react-native';
 import api from '../services/api';
 import logo from '../assets/logo.png';
 
-export default function Login(navigation) {
+export default function Login({navigation}) {
     const [email, setEmail] = useState('');
     const [techs, setTechs] = useState('');
 
 
     async function handleSubmit() {
-        console.log(email);
-        console.log(techs);
         const response = await api.post('/sessions', { email });
         const { _id } = response.data;
         console.log(response.data);
-        await AsyncStorage.setItem('user_id', _id);
+        await AsyncStorage.setItem('user', _id);
         await AsyncStorage.setItem('techs', techs);
+        const user = await AsyncStorage.getItem('user');
+        console.log(typeof navigation);
         navigation.navigate('List');
+        console.log(user);
 
     }
     return (
-        <KeyboardAvoidingView enabled={Platform.OS === 'ios'} behavior='padding'>
+        <KeyboardAvoidingView style={styles.container} enabled={Platform.OS === 'ios'} behavior='padding'>
             <Image source={logo} />
             <View style={styles.form}>
                 <Text style={styles.label}>SEU EMAIL *</Text>
@@ -48,7 +48,6 @@ export default function Login(navigation) {
 
                 <TouchableOpacity onPress={handleSubmit} style={styles.button}>
                     <Text style={styles.buttonText}>Cadastrar</Text>
-
                 </TouchableOpacity>
             </View>
 
