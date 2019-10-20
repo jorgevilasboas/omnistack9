@@ -26,10 +26,10 @@ export default function Login({navigation}) {
 
         //await AsyncStorage.setItem('user', _id);
         //await AsyncStorage.setItem('techs', techs);
-        const user = await AsyncStorage.getItem('user');
-        console.log(typeof navigation);
+        //const user = await AsyncStorage.getItem('user');
+        //console.log(typeof navigation);
         navigation.navigate('List');
-        console.log(user);
+        //console.log(user);
 
     }
     return (
