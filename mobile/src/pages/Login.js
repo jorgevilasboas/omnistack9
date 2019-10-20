@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { View, AsyncStorage, KeyboardAvoidingView, TouchableOpacity, Platform, Text, Image, TextInput, StyleSheet } from 'react-native';
 import api from '../services/api';
 import logo from '../assets/logo.png';
@@ -7,13 +7,25 @@ export default function Login({navigation}) {
     const [email, setEmail] = useState('');
     const [techs, setTechs] = useState('');
 
+    useEffect(() => {
+        AsyncStorage.getItem('user').then(user => {
+            if (user){
+                navigation.navigate('List');
+            }
+        })
+    },
+    [])
+
 
     async function handleSubmit() {
         const response = await api.post('/sessions', { email });
         const { _id } = response.data;
         console.log(response.data);
-        await AsyncStorage.setItem('user', _id);
-        await AsyncStorage.setItem('techs', techs);
+        global.user = _id;
+        global.techs = techs;
+
+        //await AsyncStorage.setItem('user', _id);
+        //await AsyncStorage.setItem('techs', techs);
         const user = await AsyncStorage.getItem('user');
         console.log(typeof navigation);
         navigation.navigate('List');
